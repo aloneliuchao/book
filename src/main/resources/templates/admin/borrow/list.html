@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>图书管理系统-图书借阅</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/jquery-1.11.0.min.js}"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="inc/top :: div"></div>
+    <div th:replace="inc/left :: div"></div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;" id="lay_body">
+
+            <div>
+                <div id="queryDiv">
+                    <form class="layui-form"  id="queryForm" method="post" th:action="@{/admin/borrow/borrowQueryBook}">
+                        <input type="hidden" id="queryBookType" name="bookTypeId" th:value="${bookTypeId}"/>
+                        <div class="layui-form-item">
+                            <div style="display:inline-block; ">
+                                <label class="layui-form-label">书名</label>
+                                <input type="text" name="name" required lay-verify="required" autocomplete="off" class="layui-input" style="width: 100px;">
+                            </div>
+
+                            <div style="display:inline-block; ">
+                                <label class="layui-form-label">作者</label>
+                                <input type="text" name="author" autocomplete="off" class="layui-input" style="width: 100px;">
+                            </div>
+                            <div style="display:inline-block;">
+                                <label class="layui-form-label">是否借出</label>
+                                <input type="checkbox" name="state" lay-skin="switch" lay-text="是|否">
+                            </div>
+
+                            <button class="layui-btn" lay-submit lay-filter="formDemo">查询</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </form>
+                </div>
+            <table class="layui-table" >
+                <thead>
+                <tr>
+                    <td width="50" align="center" fixed="left">序号</td>
+                    <td align="center">书名</td>
+                    <td align="center">作者</td>
+                    <td align="center">出版社</td>
+                    <td align="center">价格</td>
+                    <td align="center">出版时间</td>
+
+                    <td th:width="100" align="center" fixed="right">操作</td>
+                </tr>
+                </thead>
+                <tbody id="dataTbody">
+
+                </tbody>
+            </table>
+            <div id="page"></div>
+        </div>
+        </div>
+    </div>
+    <div th:replace="inc/foot :: div"></div>
+</div>
+
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            //layer.msg(JSON.stringify(data.field));
+            return true;
+        });
+    });
+</script>
+<script type="text/javascript">
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
+
+    $(function () {
+        $('#menu a').each(function () {
+            var aText = $(this).text();
+            if ('图书借阅' == aText) {
+                $(this).parent('dd').addClass('layui-this');
+            }
+        });
+
+        $('#addBook').on('click',function () {
+            window.location = 'saveBookPage';
+        });
+
+    });
+
+    function look(id) {
+        window.open('/admin/book/lookBook/'+id);
+    }
+
+
+    function borrowBook(id) {
+        $.post('/admin/borrow/borrowBook',{'bookId':id},function (json) {
+            alert(json.info);
+            $('#borrowBtn'+id).html('已借阅');
+        });
+    }
+
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var data = /*[[${bookType.data}]]*/ 'Sebastian';
+
+    /*]]>*/
+
+    //console.info(data);
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
+
+</script>
+<script>
+    let page = 0;// 当前页，初始值设为 0
+    let size = 10;// 每页条数，初始值设为 10
+    let total;// 总记录数
+    $(document).ready(function () {
+        getInfo();// 获取数据
+        toPage();// 进行分页
+    });
+
+    // 获取数据
+    function getInfo() {
+        $.ajax({
+            type: "post",
+            url: "/admin/book/bookData",
+            async: false,// 设置同步请求，加载数据前锁定浏览器
+            dataType: 'json',
+            data: {
+                "page": page, // 查询页码
+                "size": size, // 每页条数
+            },
+            success: successFu
+        });
+    }
+
+    // 数据请求成功
+    function successFu(pager) {
+        //console.log(pager);
+        // 1.清空原数据
+        $("#dataTbody").html("");
+        // 2.重新赋值页码、条数、总记录数
+        page = pager.bookPage.psize;
+        size = pager.bookPage.pindex;
+        total = pager.bookPage.pcount;
+        // 3.渲染数据
+        // 当前查询无数据时
+        if (pager.bookPage.pcount == 0) {
+            $("#dataTbody").html("<tr><td colspan='7' class='text-center'>暂无数据</td></tr>");
+            return;
+        }
+        let text = "";
+        $.each(pager.book, (i, item) => {
+            var jie = '';
+            if(item.state == '空闲'){
+                jie = `
+                    <a id="borrowBtn${item.id}" class="layui-btn layui-btn-xs" onclick="borrowBook(${item.id})">借阅</a>
+                `
+            }else{
+                jie = `
+                    <a class="layui-btn layui-btn-primary layui-btn-xs">已借出</a>
+                `
+            }
+            text += `
+            <tr>
+                    <th width="50">${i + 1}</th>
+                    <th align="center">${item.name}</th>
+                    <th align="center">${item.author}</th>
+                    <th align="center">${item.press}</th>
+                    <th align="center">${item.price}</th>
+                    <th align="center">${item.pressDate}</th>
+                    <th width="350" align="center">
+                        <a class="layui-btn layui-btn-primary layui-btn-xs" onclick="look(${item.id})">查看</a>
+                        ${jie}
+                    </th>
+            </tr>
+             `;
+        });
+        $("#dataTbody").html(text);
+    }
+
+    // 进行分页
+    function toPage() {
+        layui.use('laypage', function () {
+            let laypage = layui.laypage;
+            // 调用分页
+            laypage.render({
+                // 分页容器的id
+                elem: 'page',// *必选参数
+                // 数据总数，从服务端得到
+                count: total,// *必选参数
+                // 每页显示的条数。laypage将会借助 count 和 size 计算出分页数。
+                //size:size,
+                // 起始页
+                //page:Pager,
+                // 连续出现的页码个数
+                //groups:5,
+                // 自定义每页条数的选择项
+                limits: [10, 25, 50, 100],
+                // 自定义首页、尾页、上一页、下一页文本
+                first: '首页',
+                last: '尾页',
+                prev: '<em><<</em>',
+                next: '<em>>></em>',
+                // 自定义排版
+                layout: ['count', 'prev', 'page', 'next', 'size', 'skip'],
+                // 渲染数据
+                jump: function (data, first) {
+                    // data包含了当前分页的所有参数
+                    page = data.curr - 1;
+                    size = data.limit;
+                    // 首次不执行
+                    if (!first) {
+                        getInfo();
+                    }
+                }
+            });
+        })
+    }
+
+</script>
+</body>
+
+</html>

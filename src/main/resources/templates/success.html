@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" th:src="@{/js/lib/jquery-1.11.0.min.js}"></script>
+</head>
+<body>
+    <input type="hidden" id="info" th:value="${info}">
+    <!--<input type="hidden" th:value="${url}" id="url"/>-->
+    <script type="text/javascript">
+        var info = $('#info').val();
+        alert($('#info').val());
+        if(info == '登录成功'){
+            window.location = '/myaccount';
+        }else{
+            history.back();
+        }
+
+    </script>
+</body>
+</html>

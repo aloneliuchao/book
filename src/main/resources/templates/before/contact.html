@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书管理系统</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <script type="text/javascript" th:src="@{/js/lib/jquery-1.11.0.min.js}"></script>
+</head>
+<body>
+<div id="wrap">
+    <div th:replace="inc/before/head :: div"></div>
+
+    <div class="center_content">
+        <div class="left_content">
+            <div class="title"><span class="title_icon"><img src="images/bullet1.gif" alt="" title=""/></span>联系我们</div>
+
+            <div class="feat_prod_box_details">
+
+                <form id="contactForm" method="post">
+                    <div class="contact_form">
+                        <div class="form_subtitle">留言</div>
+                        <div class="form_row">
+                            <label class="contact"><strong>姓名:</strong></label>
+                            <input type="text" class="contact_input" name="name" id="name"/>
+                        </div>
+
+                        <div class="form_row">
+                            <label class="contact"><strong>Email:</strong></label>
+                            <input type="text" class="contact_input" name="email" id="email"/>
+                        </div>
+
+
+                        <div class="form_row">
+                            <label class="contact"><strong>电话:</strong></label>
+                            <input type="text" class="contact_input" name="phone" id="phone"/>
+                        </div>
+
+
+                        <div class="form_row">
+                            <label class="contact"><strong>内容:</strong></label>
+                            <textarea class="contact_textarea" name="content" id="content"></textarea>
+                        </div>
+
+
+                        <div class="form_row">
+                            <input type="button" id="contactBtn" class="register" value="留言"/>
+                        </div>
+                </form>
+            </div>
+        </div>
+
+            <div class="clear"></div>
+        </div><!--end of left content-->
+
+        <div th:replace="inc/before/right :: div"></div>
+        <div class="clear"></div>
+    </div><!--end of center content-->
+    <div th:replace="inc/before/footer :: div"></div>
+</div>
+
+</body>
+<script type="text/javascript">
+    $(function () {
+        $('#menu a').each(function () {
+            var aText = $(this).text();
+            if ('留言' == aText) {
+                $(this).parent('li').addClass('selected');
+            } else {
+                $(this).parent('li').removeClass('selected');
+            }
+
+        });
+
+
+    $('#contactBtn').on('click',function () {
+        var name = $('#name').val();
+        if(name == '' || name == null){
+            alert("留言姓名不能为空");
+            $('#name').focus();
+            return;
+        }
+        var content = $('#content').val();
+        if(content == '' || content == null){
+            alert("留言内容不能为空");
+            $('#content').focus();
+            return;
+        }
+        var url = '/contact/saveContact';
+        var data = {
+            'name':$('#name').val(),
+            'email':$('#email').val(),
+            'phone':$('#phone').val(),
+            'content':$('#content').val()
+        };
+        
+        $.post(url,data,function (data) {
+            alert(data.info);
+            window.location.reload();
+        });
+
+    });
+
+
+
+
+    });
+</script>
+</html>

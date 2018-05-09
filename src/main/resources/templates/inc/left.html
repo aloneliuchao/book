@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll" id="menu">
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <ul class="layui-nav layui-nav-tree" lay-filter="test">
+            <li class="layui-nav-item layui-nav-itemed">
+                <dl class="layui-nav-child" th:if="${user.roleList.get(0).roleName eq '管理员'}">
+                    <dd><a th:href="@{/admin/role/}">角色管理</a></dd>
+                    <dd><a th:href="@{/admin/user/}">用户管理</a></dd>
+                    <!--<dd><a th:href="@{/admin/bookType/}">图书类别</a></dd>-->
+                    <dd><a th:href="@{/admin/book/}">图书管理</a></dd>
+                    <dd><a th:href="@{/admin/borrow/}">图书借阅</a></dd>
+                    <dd><a th:href="@{/admin/borrow/query}">借阅查询</a></dd>
+                    <dd><a th:href="@{/admin/borrow/calculation}">图书计费</a></dd>
+                    <dd><a th:href="@{/admin/contact/}">留言管理</a></dd>
+                    <dd><a th:href="@{/admin/user/userInfo}">个人信息</a></dd>
+                </dl>
+                <dl class="layui-nav-child" th:if="${user.roleList.get(0).roleName eq '读者'}">
+                    <dd><a th:href="@{/admin/borrow/}">图书借阅</a></dd>
+                    <dd><a th:href="@{/admin/borrow/query}">借阅查询</a></dd>
+                    <dd><a th:href="@{/admin/borrow/calculation}">图书计费</a></dd>
+                    <dd><a th:href="@{/admin/user/userInfo}">个人信息</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

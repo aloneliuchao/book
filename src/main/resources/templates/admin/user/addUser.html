@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" >
+<head>
+    <meta charset="UTF-8">
+    <title>图书管理系统-用户添加</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/jquery-1.11.0.min.js}"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="inc/top :: div"></div>
+    <div th:replace="inc/left :: div"></div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;" id="lay_body">
+            <fieldset class="layui-elem-field">
+                <legend>用户新增</legend>
+                <div class="layui-field-box">
+                    <form  class="layui-form" method="post" th:action="@{/admin/user/saveAdminUser}">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="name" required lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">密码</label>
+                            <div class="layui-input-inline">
+                                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">Email</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" required lay-verify="required" placeholder="请输入Email" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="phone" required lay-verify="required" placeholder="请输入电话" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">角色</label>
+                            <div class="layui-input-inline">
+                                <select name="role" lay-verify="required">
+                                    <option value=""></option>
+                                    <option value="管理员">管理员</option>
+                                    <option value="读者">读者</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="formDemo">添加用户</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+    <div th:replace="inc/foot :: div"></div>
+</div>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            //layer.msg(JSON.stringify(data.field));
+            return true;
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('#menu a').each(function () {
+            var aText = $(this).text();
+            if('用户管理' == aText){
+                $(this).parent('dd').addClass('layui-this');
+            }
+        });
+    });
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var info = /*[[${info}]]*/ 'Sebastian';
+
+    /*]]>*/
+    if(info != null && info != ''){
+        alert(info);
+    }
+</script>
+</body>
+</html>

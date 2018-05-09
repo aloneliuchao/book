@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="layui-header">
+    <div class="layui-logo">图书管理系统后台</div>
+    <ul class="layui-nav layui-layout-left">
+        <li class="layui-nav-item"><a href="/index" target="_blank">首页</a></li>
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item">
+            <a href="javascript:;">
+                <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                <span th:text="${user.name}+'-'+${user.roleList.get(0).roleName}"></span>
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a th:href="@{/admin/user/userInfo}">基本资料</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item"><a th:href="@{/admin/loginOut}">退出</a></li>
+    </ul>
+</div>
+</body>
+</html>

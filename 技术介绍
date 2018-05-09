@@ -1,0 +1,70 @@
+1、入口类
+注解：@SpringBootApplication
+入口类命名为＊Application；该类里面包含一个main方法，是一个标准的Java应用的入口方法；main方法调用SpringApplication.run方法，启动Spring Boot应用项目。
+
+@SpringBootApplication组合了三个注解：@Configuration、@EnableAutoConfiguration、@ComponentScan。
+
+2、Controller
+注解：@RestController
+结合了RESTful：RESTful + @Controller
+
+API注解：
+1）@RequestMapping
+作用：映射URL。
+
+@RequestMapping(value = "/process/{processId}", method = RequestMethod.GET)
+public @ResponseBody Person getOnePerson(@PathVariable("personId") String personId) {}
+
+简写：
+
+@GetMapping("/process/{processId}")
+public @ResponseBody Person getOnePerson(@PathVariable("personId") String personId) {}
+
+POST、PUT、DELETE、PATCH方法类似。
+
+2）@RequestBody
+作用：读取Request请求的body部分数据，其数据编码格式由Header部分的Content-Type指定。
+
+@PostMapping("/person")
+public void addOnePerson(@RequestBody PersonRequest request) {}
+
+3）@ResponseBody
+作用：将方法返回的数据写入Response的body部分。
+
+4）@RequestParam
+作用：简单绑定参数到Web请求中。
+
+@GetMapping("/person")
+public @ResponseBody Person
+getOnePerson(@RequestParam("personId") String personId) {}
+
+5）@RequestHeader
+作用：将请求的头信息映射为方法的参数。
+
+@GetMapping("/header")
+public void displayHeaderInfo(
+@RequestHeader("Accept-Encoding") String encoding,
+@RequestHeader("Keep-Alive") long keepAlive
+){}
+
+3、Service
+注解：
+@Service：声明Service组件
+@Transactional：声明事务
+
+4、Repository
+
+public XXXRepo extends CrudRepository<Class，IDType>{}
+1
+5、POJO
+注解：
+@Entity：实体类
+@Table：指定数据库的表名
+@ID：指定数据库的主键
+@Column：指定数据库的字段
+@ManyToOne：多对一的关系
+@OneToMany：一对多的关系
+
+6、Exception
+
+7、Util

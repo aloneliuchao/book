@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="footer">
+    <div class="left_footer"> <a
+            href="#" title="free templates">图书管理系统</a></div>
+    <div class="right_footer">
+        <a th:href="@{/book}">图书</a>
+        <a th:href="@{/myaccount}">个人中心</a>
+        <a th:href="@{/register}">注册</a>
+        <a th:href="@{/contact}">留言</a>
+        <a th:href="@{/about}">关于我们</a>
+        <a th:href="@{/admin/login}" target="_blank">后台管理</a>
+    </div>
+
+
+</div>
+</body>
+</html>

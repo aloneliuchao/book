@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>图书管理系统-图示类别</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/jquery-1.11.0.min.js}"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="inc/top :: div"></div>
+    <div th:replace="inc/left :: div"></div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;" id="lay_body">
+            <div style="float: left; width: 300px;position:fixed">
+                <ul id="bookType"></ul>
+            </div>
+            <div style="margin-left: 310px;">
+                <fieldset class="layui-elem-field">
+                    <legend>图书类别—管理</legend>
+                    <div class="layui-field-box">
+                        <form class="layui-form" method="post" th:action="@{/admin/bookType/addBookType}">
+                            <div class="layui-form-item" id="fId">
+                                <label class="layui-form-label">父节点</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" readonly="readonly" id="pIdName" name="pIdName" required lay-verify="required" placeholder="父节点" autocomplete="off" class="layui-input">
+                                    <input type="hidden" name="pId" id="pId" value="0"/>
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">（选择左边父节点不选默认是根节点）</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">类别名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="name" name="name" required lay-verify="required" placeholder="类别名称" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="formDemo">新建类别</button>
+                                    <button type="button" id="updateTree" class="layui-btn layui-btn-primary"><span id="btnText">修改</span></button>
+                                    <button type="button" id="dalectTree" class="layui-btn layui-btn-primary"><span id="dbtnText">删除</span></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </fieldset>
+            </div>
+
+        </div>
+    </div>
+    <div th:replace="inc/foot :: div"></div>
+
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var data = /*[[${bookType.data}]]*/ 'Sebastian';
+
+    /*]]>*/
+
+    //console.info(data);
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
+    layui.use('tree', function () {
+        layui.tree({
+            elem: '#bookType' //传入元素选择器
+            , nodes: data,
+            click: function(node){
+                console.info(node.name);
+                $('#pId').attr('value',node.id);
+                $('#pIdName').attr('value',node.name);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
+
+    $(function () {
+        $('#menu a').each(function () {
+            var aText = $(this).text();
+            if ('图书类别' == aText) {
+                $(this).parent('dd').addClass('layui-this');
+            }
+        });
+        
+        $('#updateTree').on('click',function () {
+            var id = $('#pId').val();
+
+            var name = $('#pIdName').val();
+            if(id == 0 || id == null){
+                alert('请选择要修改的类别');
+                return;
+            }else{
+                $('#fId').css("display","none");
+                $('#name').attr('value',name);
+                $('#btnText').html('确认修改');
+                $('#updateTree').on('click',function () {
+                    console.info('修改成功');
+                    var url = '/admin/bookType/updateBookType';
+                    var data = {
+                        id : $('#pId').val(),
+                        name : $('#name').val()
+                    };
+                    $.post(url,data,function (json) {
+                        if('success' == json.info){
+                            alert('修改成功');
+                            window.location.reload();
+                        }else{
+                            alert('修改失败');
+                        }
+                    })
+                });
+            }
+
+        });
+
+        $('#dalectTree').on('click',function () {
+            var id = $('#pId').val();
+
+            var name = $('#pIdName').val();
+            if(id == 0 || id == null){
+                alert('请选择要删除的类别');
+                return;
+            }else {
+                $('#fId').css("display", "none");
+                $('#name').attr('value', name);
+                $('#dbtnText').html('确认删除');
+                    $('#dalectTree').on('click', function () {
+                        var url = '/admin/bookType/delectBookType';
+                        var data = {
+                            id: $('#pId').val(),
+                            name: $('#name').val()
+                        };
+                        if (window.confirm('你确定要删除类别吗？')) {
+                            $.post(url, data, function (json) {
+                                if ('success' == json.info) {
+                                    alert('删除成功');
+                                    window.location.reload();
+                                } else {
+                                    alert('删除失败');
+                                }
+                            })
+                        }else{
+                            return false;
+                        }
+                    })
+                }
+        });
+        
+    });
+
+
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var info = /*[[${info}]]*/ 'Sebastian';
+
+    /*]]>*/
+    if(info != null && info != ''){
+        alert(info);
+    }
+</script>
+</body>
+
+</html>

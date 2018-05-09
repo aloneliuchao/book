@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书管理系统</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <script type="text/javascript" th:src="@{/js/lib/jquery-1.11.0.min.js}"></script>
+</head>
+<body>
+<div id="wrap">
+    <div th:replace="inc/before/head :: div"></div>
+    <div class="center_content">
+        <div class="left_content" th:border="0">
+            <table class="layui-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            欢迎<span th:text="${user.name}"></span>登录
+                        </td>
+                        <td align="right">
+                            <a th:href="@{'/admin/user/userPage/'+${user.id}}">编辑用户信息</a> |
+                            <a th:href="@{/loginOut}">退出</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <div class="clear"></div>
+        </div><!--end of left content-->
+
+        <div th:replace="inc/before/right :: div"></div>
+        <div class="clear"></div>
+    </div><!--end of center content-->
+    <div th:replace="inc/before/footer :: div"></div>
+
+
+</div>
+
+</body>
+<script type="text/javascript">
+    $(function () {
+        $('#menu a').each(function () {
+            var aText = $(this).text();
+            if ('个人中心' == aText) {
+                $(this).parent('li').addClass('selected');
+            } else {
+                $(this).parent('li').removeClass('selected');
+            }
+
+        });
+
+
+    });
+</script>
+</html>

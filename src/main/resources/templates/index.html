@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书管理系统</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div id="wrap">
+    <div th:replace="inc/before/head :: div"></div>
+    <div class="center_content">
+        <div class="left_content">
+
+            <div class="title"><span class="title_icon"><img src="images/bullet1.gif" alt="" title=""/></span>热门图书</div>
+
+            <div class="feat_prod_box">
+                <div th:each="h : ${hot}">
+                    <div class="prod_img">
+                        <a th:href="@{'/book/'+${h.id}}">
+                            <img th:width="105" height="115" th:src="@{'/image/'+${h.image}}" alt="" title="" border="0"/>
+                        </a>
+                    </div>
+
+                    <div class="prod_det_box">
+                        <div class="box_top"></div>
+                        <div class="box_center">
+                            <div class="prod_title" th:text="${h.name}"></div>
+                            <p class="details" th:text="${h.synopsis}">书的介绍</p>
+                            <a th:href="@{'/book/'+${h.id}}" class="more">- 详情 -</a>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="box_bottom"></div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+
+            <div class="title"><span class="title_icon"><img src="images/bullet2.gif" alt="" title=""/></span>新书推荐</div>
+
+            <div class="new_products">
+
+                <div class="new_prod_box" th:each="n : ${newBook}">
+                    <div class="new_prod_bg">
+                        <span class="new_icon">
+                            <img src="images/new_icon.gif" alt="" title=""/>
+                        </span>
+                        <a th:href="@{'/book/'+${n.id}}">
+                            <img th:width="95" height="100" th:src="@{'/image/'+${n.image}}" alt="" title="" class="thumb"
+                                 border="0"/>
+                        </a>
+                    </div>
+                    <a th:href="@{'/book/'+${n.id}}" th:text="${n.name}"></a>
+                </div>
+
+
+            </div>
+
+            <div class="clear"></div>
+        </div><!--end of left content-->
+
+        <div th:replace="inc/before/right :: div"></div>
+
+        <div class="clear"></div>
+    </div><!--end of center content-->
+
+    <div th:replace="inc/before/footer :: div"></div>
+
+
+</div>
+
+</body>
+</html>

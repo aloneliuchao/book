@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="right_content">
+    <div class="title"><span class="title_icon"><img src="images/bullet3.gif" alt="" title=""/></span>关于我们</div>
+    <div class="about">
+        <p>
+            <img src="images/about.gif" alt="" title="" class="right"/>
+            图书馆，是搜集、整理、收藏图书资料以供人阅览、参考的机构，早在公元前3000年就出现了图书馆，图书馆有保存人类文化遗产、开发信息资源、参与社会教育等职能。据《在辞典中出现的“图书馆”》说，“图书馆”一词最初在日本的文献中出现是1877年的事；而最早在我国文献中出现，当推《教育世界》第62期中所刊出的一篇《拟设简便图书馆说》，时为1894年。中国最早的省级图书馆为1904年创办的湖北省图书馆。
+        </p>
+
+    </div>
+    <div class="right_box">
+        <div class=""><span class="title_icon"><img src="images/bullet5.gif" alt="" title=""/></span>图书类别</div>
+        <div style="padding-top: 15px;"><ul id="bookType"></ul></div>
+    </div>
+
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/jquery-1.11.0.min.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        var data = /*[[${bookType.data}]]*/ 'Sebastian';
+
+        /*]]>*/
+
+        //console.info(data);
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var element = layui.element;
+        });
+        var layer;
+        layui.use('layer', function(){
+            layer = layui.layer;
+        });
+        layui.use('tree', function () {
+            layui.tree({
+                elem: '#bookType' //传入元素选择器
+                , nodes: data,
+                click: function(node){
+
+                }
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书管理系统</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <script type="text/javascript" th:src="@{/js/lib/jquery-1.11.0.min.js}"></script>
+</head>
+<body>
+<div id="wrap">
+    <div th:replace="inc/before/head :: div"></div>
+    <div class="center_content">
+        <div class="left_content">
+            <div class="title"><span class="title_icon"><img src="images/bullet1.gif" alt="" title=""/></span>登录
+            </div>
+
+            <div class="feat_prod_box_details">
+                <div class="contact_form">
+                    <div class="form_subtitle">用户登录</div>
+                    <form name="register" id="loginForm" method="post" th:action="@{/admin/user/login}">
+                        <div class="form_row">
+                            <label class="contact"><strong>用户名:</strong></label>
+                            <input type="text" class="contact_input" name="username" id="username"/>
+                        </div>
+
+
+                        <div class="form_row">
+                            <label class="contact"><strong>密码:</strong></label>
+                            <input type="password" class="contact_input" name="password" id="password"/>
+                        </div>
+
+
+
+                        <div class="form_row">
+                            <input type="button" id="loginBtn" class="register" value="登录"/>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <div class="clear"></div>
+        </div><!--end of left content-->
+
+        <div th:replace="inc/before/right :: div"></div>
+        <div class="clear"></div>
+    </div><!--end of center content-->
+    <div th:replace="inc/before/footer :: div"></div>
+
+
+</div>
+
+</body>
+<script type="text/javascript">
+    $(function () {
+        $('#menu a').each(function () {
+            var aText = $(this).text();
+            if ('个人中心' == aText) {
+                $(this).parent('li').addClass('selected');
+            } else {
+                $(this).parent('li').removeClass('selected');
+            }
+
+        });
+
+        $('#loginBtn').on('click',function () {
+            var username = $('#username').val();
+            if(username == '' || username == null){
+                $('#username').focus();
+                alert('用户名不能为空');
+                return;
+            }
+            var pass = $('#password').val();
+            if(pass == '' || pass == null){
+                $('#password').focus();
+                alert('密码不能为空');
+                return;
+            }
+
+            $('#loginForm').submit();
+        });
+    });
+</script>
+</html>

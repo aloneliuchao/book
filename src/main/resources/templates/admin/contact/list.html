@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>图书管理系统-留言管理</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"/>
+    <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/jquery-1.11.0.min.js}"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="inc/top :: div"></div>
+    <div th:replace="inc/left :: div"></div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;" id="lay_body">
+            <table class="layui-table" >
+                <thead>
+                <tr>
+                    <td width="30" align="center">序号</td>
+                    <td align="center">用户</td>
+                    <td align="center">email</td>
+                    <td align="center">电话</td>
+                    <td align="center">时间</td>
+                    <td align="center" th:width="350">留言内容</td>
+                    <td th:width="150" align="center">操作</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="con,stat : ${contacts}">
+                    <td width="30" th:text="${stat.index+1}"></td>
+                    <td th:text="${con.name}" align="center"></td>
+                    <td th:text="${con.email}" align="center"></td>
+                    <td th:text="${con.phone}" align="center"></td>
+                    <td th:text="${con.date}" align="center"></td>
+                    <td th:text="${con.content}" align="center" th:width="350"></td>
+                    <td th:width="150" align="center">
+                        <!--<a class="layui-btn layui-btn-primary layui-btn-xs" th:onclick="'look('+${con.id}+')'">查看</a>-->
+                        <!--<a class="layui-btn layui-btn-xs" th:onclick="'edit('+${con.id}+')'">编辑</a>-->
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" th:onclick="'delect('+${con.id}+')'">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div id="page"></div>
+        </div>
+    </div>
+    <div th:replace="inc/foot :: div"></div>
+    <di
+</div>
+<div id="pagenum">
+    <input type="hidden" th:value="${contacts.size()}"  id="pagesum">
+</div>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    layui.use(['laypage', 'layer'], function() {
+        var laypage = layui.laypage;
+
+        //总页数低于页码总数
+        laypage.render({
+            elem: 'page'
+            ,count: $('#pagesum').val()
+            ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+            ,jump: function(obj){
+                console.log(obj)
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
+
+    $(function () {
+        $('#menu a').each(function () {
+            var aText = $(this).text();
+            if ('留言管理' == aText) {
+                $(this).parent('dd').addClass('layui-this');
+            }
+        });
+
+    });
+
+    //查看
+
+    //删除
+    function delect(id) {
+        var url = '/admin/contact/delect/'+id;
+        if(window.confirm('你确定要删除留言吗？')){
+            $.post(url,{},function (json) {
+                alert(json.info);
+                window.location.reload();
+            });
+            return true;
+        }else{
+            //alert("取消");
+            return false;
+        }
+    }
+
+    
+</script>
+
+</body>
+
+</html>
